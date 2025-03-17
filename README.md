@@ -46,8 +46,9 @@ in Python. R support TBD.
    - There are no predictions for patients not found in the goldstandard
      (unknown IDs)
 
-> [!IMPORTANT] **Modifying the `main()` function is highly discouraged.** This
-> function has specifically been written to interact with ORCA.
+> [!IMPORTANT]
+> Modifying the `main()` function is highly discouraged. This function has
+> specifically been written to interact with ORCA.
 
 3. Update `requirements.txt` with any additional libraries/packages used by the
    script.
@@ -82,8 +83,9 @@ in Python. R support TBD.
    - Area under the receiver operating characteristic curve (AUROC)
    - Area under the precision-recall curve (AUPRC)
 
-> [!IMPORTANT] **Modifying the `main()` function is highly discouraged.** This
-> function has specifically been written to interact with ORCA.
+> [!IMPORTANT]
+> Modifying the `main()` function is highly discouraged. This function has
+> specifically been written to interact with ORCA.
 
 3. Update `requirements.txt` with any additional libraries/packages used by the script.
 
