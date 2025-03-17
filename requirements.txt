@@ -1,0 +1,4 @@
+cnb_tools==0.3.2
+pandas==2.2.2
+scikit-learn==1.6.1
+typer==0.9.4
