@@ -8,95 +8,115 @@
 </h3>
 
 You can either build off of this repository template or use it as reference to
-build your scripts from scratch.  Provided here is a sample evaluation template
+build your scripts from scratch. Provided here is a sample evaluation template
 in Python. R support TBD.
 
 ### Requirements
-* Python 3.10+
-* Docker (if containerizing manually)
+
+- Python 3.11+
+- Docker (if containerizing manually)
 
 ---
 
 ### ✅ Write your validation script
 
-1. Determine the format of the predictions file, as this will help create the list
-   validation checks.  Things to consider include:
+1. Determine the format of the predictions file, as this will help create the
+   list of validation checks. Things to consider include:
 
-     - file type (CSV? TSV?)
-     - number of columns
-     - column header names
-     - column types
-     - if column type is a number or float, is there is minimum value? Maximum?
+   - File format (e.g. CSV, TSV, text)
+   - Number of columns
+   - Column header names
+   - Column data types
+   - For numerical columns (integers or floats), are there expected minimum
+     and maximum values?
 
-   In addition to format, also consider:
+   Beyond the file structure, also think about the data content:
 
-     - can there be more than one prediction per ID/sample/patient?
-     - does every ID/sample/patient need a prediction, or can some be null/NA?
+   - Can there be multiple prediction for a single ID/patient/sample?
+   - Is a prediction required for every ID, or are missing values acceptable?
 
-2. Update `validate.py` so that it fits your needs. The template currently implements
-   the following checks:
+2. Adapt `validate.py` so that it fits your needs. The template currently
+   implements the following checks:
+   - Two columns named `id` and `probability` (any additional columns will be
+     ignored)
+   - `id` values are strings
+   - `probability` values are floats between 0.0 and 1.0, and cannot be
+     null/None
+   - There is exactly one prediction per patient (no missing or duplicate IDs)
+   - There are no predictions for patients not found in the goldstandard
+     (unknown IDs)
 
-     - two columns named `id` and `probability` (extraneous columns will be ignored)
-     - `id` values are strings
-     - `probability` values are floats between 0.0 and 1.0, and cannot be null/None
-     - there is one prediction per patient (so, no missing patient IDs or duplicate patient IDs)
-     - there are no extra predictions (so, no unknown patient IDs)
-  
-3. Update `requirements.txt` with any additional libraries/packages used by the script.
+> [!IMPORTANT] **Modifying the `main()` function is highly discouraged.** This
+> function has specifically been written to interact with ORCA.
 
-4. (optional) Locally run `validate.py` to ensure it can run successfully.
+3. Update `requirements.txt` with any additional libraries/packages used by the
+   script.
 
-   ```
+4. (optional) Locally run `validate.py` to verify its functionality, by replacing
+   the placeholder paths with the filepaths to your data:
+
+   ```bash
    python validate.py \
-     -p PATH/TO/PREDICTIONS_FILE.CSV \
-     -g PATH/TO/GOLDSTANDARD_FILE.CSV
+     --predictions_file PATH/TO/PREDICTIONS_FILE.CSV \
+     --goldstandard_folder PATH/TO/GOLDSTANDARD_FILE.CSV [--output_file PATH/TO/OUTPUT_FILE.JSON]
    ```
 
-   STDOUT will either be `VALIDATED` or `INVALID`, and full details of the validation check
-   will be printed to `results.json`.
+   The expected outcomes are:
+
+   - STDOUT will display either `VALIDATED` or `INVALID`
+   - Full validation details are saved in `results.json` (or the path specified
+     by `--output_file`)
+
+   If needed, you may use the sample data provided in `sample_data/`, however,
+   thorough testing with your own data is recommended to ensure accurate validation.
 
 ### 🏆 Write your scoring script
 
-1. Determine the evaluation metrics and how they can be computed.  We recommend evaluating
-   at least two metrics: one for primary ranking and the other for breaking ties. You
-   can also include additional metrics to give the participants more information about
-   their performance, such as sensitivity, specificity, precision, etc.
+1. Determine the evaluation metrics you will use to assess the predictions. It
+   is recommended to include at least two metrics: a primary metric for ranking
+   and a secondary metric for breaking ties. You can also include additional
+   informative metrics such as sensitivity, specificity, etc.
 
-2. Update `score.py` so that it fits your needs. The template currently evaluates for:
+2. Adapt `score.py` to calculate the metrics you have defined. The template
+   currently provides implementations for:
+   - Area under the receiver operating characteristic curve (AUROC)
+   - Area under the precision-recall curve (AUPRC)
 
-     - Area under the receiver operating characteristic curve (AUROC)
-     - Area under the precision-recall curve (AUPRC)
+> [!IMPORTANT] **Modifying the `main()` function is highly discouraged.** This
+> function has specifically been written to interact with ORCA.
 
 3. Update `requirements.txt` with any additional libraries/packages used by the script.
 
-4. (optional) Locally run `score.py` to ensure it can run successfully in addition to
-   returning expected scores.
+4. (optional) Locally run `score.py` to ensure it executes correctly and returns
+   the expected scores:
 
    ```
    python score.py \
-     -p PATH/TO/PREDICTIONS_FILE.CSV \
-     -g PATH/TO/GOLDSTANDARD_FILE.CSV
+     --predictions_file  PATH/TO/PREDICTIONS_FILE.CSV \
+     --goldstandard_folder PATH/TO/GOLDSTANDARD_FILE.CSV [--output_file PATH/TO/OUTPUT_FILE.JSON]
    ```
 
-   STDOUT will either be `SCORED` or `INVALID`, and scores will be appended to an
-   existing `results.json`.
+   The expected outcomes are:
+
+   - STDOUT will display either `SCORED` or `INVALID`
+   - Scores are appended to `results.json` (or the path specified by `--output_file`)
 
 ### 🐳 Dockerize your scripts
 
 #### Automated containerization
 
-This template repository comes with a workflow that will containerize the scripts for
-you. To trigger the workflow, you will need to [create a new release]. For tag versioning,
-we recommend following the [SemVar versioning schema].
+This template repository includes a workflow that builds a Docker container for
+your scripts. To trigger the process, you will need to [create a new release].
+For tag versioning, we recommend following the [SemVar versioning schema].
 
-This workflow will create a new image within your repository, accessible under **Packages**.
-Here is an example of [the deployed image] for this template.
+This workflow will create a new image within your repository, which can be found
+under **Packages**. Here is an example of [the deployed image] for this template.
 
 #### Manual containerization
 
-You can also use a Docker registry other than ghcr, for example: DockerHub. The only
-requirement is that the image must be publicly accessible so that the ORCA workflow
-can access it.
+You can also use other public Docker registries, such as DockerHub. The only
+requirement is that the Docker image must be publicly accessible so that ORCA
+can pull and execute it.
 
 To containerize your scripts:
 
@@ -110,15 +130,17 @@ To containerize your scripts:
 
    where:
 
-     - _IMAGE_NAME_: name of your image.
-     - _TAG_VERSION_: version of the image.  If TAG_VERSION is not supplied, `latest` will be used.
-     - _FILEPATH/TO/DOCKERFILE_: filepath to the Dockerfile, in this case, it will be the current directory (`.`)
-  
+   - _IMAGE_NAME_: name of your image.
+   - _TAG_VERSION_: version of the image. If TAG_VERSION is not supplied,
+     `latest` will be used.
+   - _FILEPATH/TO/DOCKERFILE_: filepath to the Dockerfile, in this case, it will
+     be the current directory (`.`)
+
 3. If needed, log into your registry of choice.
 
 4. Push the image:
 
-    ```
+   ```
    docker push IMAGE_NAME:TAG_VERSION
    ```
 
