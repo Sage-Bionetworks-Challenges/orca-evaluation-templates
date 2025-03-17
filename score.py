@@ -68,17 +68,27 @@ def score(gold_file: str, pred_file: str) -> dict:
 def main(
     predictions_file: Annotated[
         str,
-        typer.Option(help="Path to the prediction file."),
+        typer.Option(
+            "-p",
+            "--predictions_file",
+            help="Path to the prediction file.",
+        ),
     ],
     goldstandard_folder: Annotated[
         str,
         typer.Option(
+            "-g",
+            "--goldstandard_folder",
             help="Path to the folder containing the goldstandard file.",
         ),
     ],
     output_file: Annotated[
         str,
-        typer.Option(help="Path to save/update the results JSON file."),
+        typer.Option(
+            "-o",
+            "--output_file",
+            help="Path to save the results JSON file.",
+        ),
     ] = "results.json",
 ):
     """

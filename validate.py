@@ -87,17 +87,27 @@ def validate(gold_file: str, pred_file: str) -> list[str]:
 def main(
     predictions_file: Annotated[
         str,
-        typer.Option("-p", help="Path to the prediction file."),
+        typer.Option(
+            "-p",
+            "--predictions_file",
+            help="Path to the prediction file.",
+        ),
     ],
     goldstandard_folder: Annotated[
         str,
         typer.Option(
-            "-g", help="Path to the folder containing the goldstandard file.",
+            "-g",
+            "--goldstandard_folder",
+            help="Path to the folder containing the goldstandard file.",
         ),
     ],
     output_file: Annotated[
         str,
-        typer.Option("-o", help="Path to save the results JSON file."),
+        typer.Option(
+            "-o",
+            "--output_file",
+            help="Path to save the results JSON file.",
+        ),
     ] = "results.json",
 ):
     """Validates the predictions file in preparation for evaluation."""
