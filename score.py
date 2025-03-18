@@ -29,7 +29,7 @@ PREDICTION_COLS = {
 }
 
 
-def score(gold_file: str, pred_file: str) -> dict:
+def score(gold_file: str, pred_file: str) -> dict[str, int | float]:
     """Sample scoring function.
 
     Metrics returned:
