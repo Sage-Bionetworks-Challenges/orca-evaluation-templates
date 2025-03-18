@@ -104,19 +104,36 @@ def main(
 
     scores = {}
     status = "INVALID"
-    with open(output_file, encoding="utf-8") as out:
-        res = json.load(out)
+    try:
+        with open(output_file, encoding="utf-8") as out:
+            res = json.load(out)
+    except (FileNotFoundError, json.decoder.JSONDecodeError):
+        res = {
+            "validation_status": "",
+            "validation_errors": "",
+        }
 
-    if res.get("validation_status") == "VALIDATED":
+    # Notify that absent validation results may lead to inaccurate scores
+    # (e.g., due to multiple predictions per ID, missing predictions, etc).
+    if not res.get("validation_status"):
+        print(
+            "Validation results not found. Proceeding with scoring but "
+            "results may be inaccurate."
+        )
+
+    # Do not attempt to score if previous validations failed. Otherwise,
+    # proceed with evaluating predictions.
+    if res.get("validation_status") == "INVALID":
+        errors = "Submission could not be evaluated due to validation errors."
+    else:
         gold_file = extract_gs_file(goldstandard_folder)
         try:
             scores = score(gold_file, predictions_file)
             status = "SCORED"
             errors = ""
-        except ValueError:
+        except ValueError as err:
             errors = "Error encountered during scoring; submission not evaluated."
-    else:
-        errors = "Submission could not be evaluated due to validation errors."
+            print(f"Error encountered: {err}")
 
     res |= {
         "score_status": status,
