@@ -112,6 +112,8 @@ def main(
             "validation_errors": "",
         }
 
+    # Notify that absent validation results may lead to inaccurate scores
+    # (e.g., due to multiple predictions per ID, missing predictions, etc).
     if not res.get("validation_status"):
         print(
             "Validation results not found. Proceeding with scoring but "
