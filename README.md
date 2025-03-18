@@ -71,6 +71,8 @@ in Python. R support TBD.
    If needed, you may use the sample data provided in `sample_data/`, however,
    thorough testing with your own data is recommended to ensure accurate validation.
 
+---
+
 ### 🏆 Write your scoring script
 
 1. Determine the evaluation metrics you will use to assess the predictions. It
@@ -102,6 +104,8 @@ in Python. R support TBD.
 
    - STDOUT will display either `SCORED` or `INVALID`
    - Scores are appended to `results.json` (or the path specified by `--output_file`)
+
+---
 
 ### 🐳 Dockerize your scripts
 
@@ -146,7 +150,25 @@ To containerize your scripts:
    docker push IMAGE_NAME:TAG_VERSION
    ```
 
+---
+
+### ⏭️ Next Steps
+
+#### Already working with Sage Data Processing & Engineering (DPE) team?
+
+Create a PR to the [nf-synapse-challenge] repository to add your container
+image name to your challenge profile.
+
+#### Need to connect with the DPE team?
+
+Please reach out to the DPE team via their [DPE Service Desk] for more
+information and support regarding challenge evaluation orchestration.
+
+
+<!-- LINKS -->
 [Synapse ORCA workflow]: https://github.com/Sage-Bionetworks-Workflows/nf-synapse-challenge/tree/main
 [create a new release]: https://docs.github.com/en/repositories/releasing-projects-on-github/managing-releases-in-a-repository#creating-a-release
 [SemVar versioning schema]: https://semver.org/
 [the deployed image]: https://github.com/orgs/Sage-Bionetworks-Challenges/packages?repo_name=orca-evaluation-templates
+[nf-synapse-challenge]: https://github.com/Sage-Bionetworks-Workflows/nf-synapse-challenge
+[DPE Service Desk]: https://sagebionetworks.jira.com/servicedesk/customer/portal/5/group/7/create/51
