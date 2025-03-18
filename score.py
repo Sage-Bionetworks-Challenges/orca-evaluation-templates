@@ -103,8 +103,14 @@ def main(
 
     scores = {}
     status = "INVALID"
-    with open(output_file, encoding="utf-8") as out:
-        res = json.load(out)
+    try:
+        with open(output_file, encoding="utf-8") as out:
+            res = json.load(out)
+    except (FileNotFoundError, json.decoder.JSONDecodeError):
+        res = {
+            "validation_status": "",
+            "validation_errors": "",
+        }
 
     if res.get("validation_status") == "VALIDATED":
         gold_file = extract_gs_file(goldstandard_folder)
