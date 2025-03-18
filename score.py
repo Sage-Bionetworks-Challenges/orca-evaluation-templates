@@ -112,7 +112,11 @@ def main(
             "validation_errors": "",
         }
 
-    if res.get("validation_status") == "VALIDATED":
+    # Do not attempt to score if previous validations failed. Otherwise,
+    # proceed with evaluating predictions.
+    if res.get("validation_status") == "INVALID":
+        errors = "Submission could not be evaluated due to validation errors."
+    else:
         gold_file = extract_gs_file(goldstandard_folder)
         try:
             scores = score(gold_file, predictions_file)
@@ -120,8 +124,6 @@ def main(
             errors = ""
         except ValueError:
             errors = "Error encountered during scoring; submission not evaluated."
-    else:
-        errors = "Submission could not be evaluated due to validation errors."
 
     res |= {
         "score_status": status,
