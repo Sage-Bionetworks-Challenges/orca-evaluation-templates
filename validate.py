@@ -29,7 +29,7 @@ PREDICTION_COLS = {
 }
 
 
-def validate(gold_file: str, pred_file: str) -> list[str]:
+def validate(gt_file: str, pred_file: str) -> list[str]:
     """Sample validation function.
 
     Checks include:
@@ -47,8 +47,8 @@ def validate(gold_file: str, pred_file: str) -> list[str]:
     of a list of strings.
     """
     errors = []
-    gold = pd.read_csv(
-        gold_file,
+    real = pd.read_csv(
+        gt_file,
         usecols=GROUNDTRUTH_COLS,
         dtype=GROUNDTRUTH_COLS,
     )
@@ -66,8 +66,8 @@ def validate(gold_file: str, pred_file: str) -> list[str]:
         )
     else:
         errors.append(vtk.check_duplicate_keys(pred["id"]))
-        errors.append(vtk.check_missing_keys(gold["id"], pred["id"]))
-        errors.append(vtk.check_unknown_keys(gold["id"], pred["id"]))
+        errors.append(vtk.check_missing_keys(real["id"], pred["id"]))
+        errors.append(vtk.check_unknown_keys(real["id"], pred["id"]))
         errors.append(vtk.check_nan_values(pred["probability"]))
         errors.append(
             vtk.check_values_range(
@@ -123,7 +123,7 @@ def main(
             errors = [f.read()]
     else:
         gt_file = extract_gt_file(groundtruth_folder)
-        errors = validate(gold_file=gt_file, pred_file=predictions_file)
+        errors = validate(gt_file=gt_file, pred_file=predictions_file)
 
     invalid_reasons = "\n".join(errors)
     status = "INVALID" if invalid_reasons else "VALIDATED"

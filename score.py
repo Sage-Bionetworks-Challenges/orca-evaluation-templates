@@ -46,15 +46,15 @@ def score(gt_file: str, pred_file: str) -> dict[str, int | float]:
         dtype=PREDICTION_COLS,
         float_precision="round_trip",
     )
-    gold = pd.read_csv(
-        gold_file,
-        usecols=GOLDSTANDARD_COLS,
-        dtype=GOLDSTANDARD_COLS,
+    real = pd.read_csv(
+        gt_file,
+        usecols=GROUNDTRUTH_COLS,
+        dtype=GROUNDTRUTH_COLS,
     )
 
     # Join the two dataframes to ensure the order of the IDs are the same
-    # between goldstandard and prediction before scoring.
-    merged = gold.merge(pred, how="left", on="id")
+    # between groundtruth and prediction before scoring.
+    merged = real.merge(pred, how="left", on="id")
     roc = roc_auc_score(merged["disease"], merged["probability"])
     precision, recall, _ = precision_recall_curve(
         merged["disease"], merged["probability"]
