@@ -52,7 +52,7 @@ def score(gold_file: str, pred_file: str) -> dict[str, int | float]:
         dtype=GOLDSTANDARD_COLS,
     )
 
-    # Join the two dataframes so to ensure the order of the IDs are the same
+    # Join the two dataframes to ensure the order of the IDs are the same
     # between goldstandard and prediction before scoring.
     merged = gold.merge(pred, how="left", on="id")
     roc = roc_auc_score(merged["disease"], merged["probability"])
@@ -95,6 +95,7 @@ def main(
     Scores predictions against the goldstandard and updates the results
     JSON file with scoring status and metrics.
     """
+
     # ----- IMPORTANT: Core Workflow Function Logic -----
     # This function contains essential logic for interacting with ORCA
     # workflow. Modifying this function is strongly discouraged and may
