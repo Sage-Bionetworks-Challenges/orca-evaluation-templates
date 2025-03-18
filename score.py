@@ -112,6 +112,12 @@ def main(
             "validation_errors": "",
         }
 
+    if not res.get("validation_status"):
+        print(
+            "Validation results not found. Proceeding with scoring but "
+            "results may be inaccurate."
+        )
+
     # Do not attempt to score if previous validations failed. Otherwise,
     # proceed with evaluating predictions.
     if res.get("validation_status") == "INVALID":
@@ -122,8 +128,9 @@ def main(
             scores = score(gold_file, predictions_file)
             status = "SCORED"
             errors = ""
-        except ValueError:
+        except ValueError as err:
             errors = "Error encountered during scoring; submission not evaluated."
+            print(f"Error encountered: {err}")
 
     res |= {
         "score_status": status,
