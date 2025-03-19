@@ -46,7 +46,7 @@ def score(gt_file: str, pred_file: str) -> dict[str, int | float]:
         dtype=PREDICTION_COLS,
         float_precision="round_trip",
     )
-    real = pd.read_csv(
+    truth = pd.read_csv(
         gt_file,
         usecols=GROUNDTRUTH_COLS,
         dtype=GROUNDTRUTH_COLS,
@@ -54,7 +54,7 @@ def score(gt_file: str, pred_file: str) -> dict[str, int | float]:
 
     # Join the two dataframes to ensure the order of the IDs are the same
     # between groundtruth and prediction before scoring.
-    merged = real.merge(pred, how="left", on="id")
+    merged = truth.merge(pred, how="left", on="id")
     roc = roc_auc_score(merged["disease"], merged["probability"])
     precision, recall, _ = precision_recall_curve(
         merged["disease"], merged["probability"]

@@ -47,7 +47,7 @@ def validate(gt_file: str, pred_file: str) -> list[str]:
     of a list of strings.
     """
     errors = []
-    real = pd.read_csv(
+    truth = pd.read_csv(
         gt_file,
         usecols=GROUNDTRUTH_COLS,
         dtype=GROUNDTRUTH_COLS,
@@ -66,8 +66,8 @@ def validate(gt_file: str, pred_file: str) -> list[str]:
         )
     else:
         errors.append(vtk.check_duplicate_keys(pred["id"]))
-        errors.append(vtk.check_missing_keys(real["id"], pred["id"]))
-        errors.append(vtk.check_unknown_keys(real["id"], pred["id"]))
+        errors.append(vtk.check_missing_keys(truth["id"], pred["id"]))
+        errors.append(vtk.check_unknown_keys(truth["id"], pred["id"]))
         errors.append(vtk.check_nan_values(pred["probability"]))
         errors.append(
             vtk.check_values_range(
