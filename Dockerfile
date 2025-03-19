@@ -10,7 +10,7 @@ RUN groupadd -r user && useradd -m --no-log-init -r -g user user
 USER user
 
 # Set default working directory.
-WORKDIR /usr/local/bin
+WORKDIR /home/user
 
 # Copy over Python dependencies file and install.
 COPY --chown=user:user requirements.txt .
