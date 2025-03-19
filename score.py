@@ -12,12 +12,12 @@ import typer
 from sklearn.metrics import auc, precision_recall_curve, roc_auc_score
 from typing_extensions import Annotated
 
-from utils import extract_gs_file
+from utils import extract_gt_file
 
 # ---- CUSTOMIZATION REQUIRED ----
 
-# Goldstandard columns and data type.
-GOLDSTANDARD_COLS = {
+# Groundtruth columns and data type.
+GROUNDTRUTH_COLS = {
     "id": str,
     "disease": int,
 }
@@ -29,7 +29,7 @@ PREDICTION_COLS = {
 }
 
 
-def score(gold_file: str, pred_file: str) -> dict[str, int | float]:
+def score(gt_file: str, pred_file: str) -> dict[str, int | float]:
     """Sample scoring function.
 
     Metrics returned:
@@ -46,15 +46,15 @@ def score(gold_file: str, pred_file: str) -> dict[str, int | float]:
         dtype=PREDICTION_COLS,
         float_precision="round_trip",
     )
-    gold = pd.read_csv(
-        gold_file,
-        usecols=GOLDSTANDARD_COLS,
-        dtype=GOLDSTANDARD_COLS,
+    truth = pd.read_csv(
+        gt_file,
+        usecols=GROUNDTRUTH_COLS,
+        dtype=GROUNDTRUTH_COLS,
     )
 
     # Join the two dataframes to ensure the order of the IDs are the same
-    # between goldstandard and prediction before scoring.
-    merged = gold.merge(pred, how="left", on="id")
+    # between groundtruth and prediction before scoring.
+    merged = truth.merge(pred, how="left", on="id")
     roc = roc_auc_score(merged["disease"], merged["probability"])
     precision, recall, _ = precision_recall_curve(
         merged["disease"], merged["probability"]
@@ -74,12 +74,12 @@ def main(
             help="Path to the prediction file.",
         ),
     ],
-    goldstandard_folder: Annotated[
+    groundtruth_folder: Annotated[
         str,
         typer.Option(
             "-g",
-            "--goldstandard_folder",
-            help="Path to the folder containing the goldstandard file.",
+            "--groundtruth_folder",
+            help="Path to the folder containing the groundtruth file.",
         ),
     ],
     output_file: Annotated[
@@ -92,7 +92,7 @@ def main(
     ] = "results.json",
 ):
     """
-    Scores predictions against the goldstandard and updates the results
+    Scores predictions against the groundtruth and updates the results
     JSON file with scoring status and metrics.
     """
 
@@ -126,9 +126,9 @@ def main(
     if res.get("validation_status") == "INVALID":
         errors = "Submission could not be evaluated due to validation errors."
     else:
-        gold_file = extract_gs_file(goldstandard_folder)
+        gt_file = extract_gt_file(groundtruth_folder)
         try:
-            scores = score(gold_file, predictions_file)
+            scores = score(gt_file, predictions_file)
             status = "SCORED"
             errors = ""
         except ValueError as err:

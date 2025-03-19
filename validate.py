@@ -12,12 +12,12 @@ import typer
 from cnb_tools import validation_toolkit as vtk
 from typing_extensions import Annotated
 
-from utils import extract_gs_file
+from utils import extract_gt_file
 
 # ---- CUSTOMIZATION REQUIRED ----
 
-# Goldstandard columns and data type.
-GOLDSTANDARD_COLS = {
+# Groundtruth columns and data type.
+GROUNDTRUTH_COLS = {
     "id": str,
     "disease": int,
 }
@@ -29,14 +29,14 @@ PREDICTION_COLS = {
 }
 
 
-def validate(gold_file: str, pred_file: str) -> list[str]:
+def validate(gt_file: str, pred_file: str) -> list[str]:
     """Sample validation function.
 
     Checks include:
         - Prediction file has the expected columns and data types
         - There is exactly one prediction for each ID
         - Every ID has a prediction
-        - There are no predictions for IDs not present in the goldstandard
+        - There are no predictions for IDs not present in the groundtruth
         - Prediction values are not null
         - Prediction values are between 0 and 1, inclusive
 
@@ -47,10 +47,10 @@ def validate(gold_file: str, pred_file: str) -> list[str]:
     of a list of strings.
     """
     errors = []
-    gold = pd.read_csv(
-        gold_file,
-        usecols=GOLDSTANDARD_COLS,
-        dtype=GOLDSTANDARD_COLS,
+    truth = pd.read_csv(
+        gt_file,
+        usecols=GROUNDTRUTH_COLS,
+        dtype=GROUNDTRUTH_COLS,
     )
     try:
         pred = pd.read_csv(
@@ -66,8 +66,8 @@ def validate(gold_file: str, pred_file: str) -> list[str]:
         )
     else:
         errors.append(vtk.check_duplicate_keys(pred["id"]))
-        errors.append(vtk.check_missing_keys(gold["id"], pred["id"]))
-        errors.append(vtk.check_unknown_keys(gold["id"], pred["id"]))
+        errors.append(vtk.check_missing_keys(truth["id"], pred["id"]))
+        errors.append(vtk.check_unknown_keys(truth["id"], pred["id"]))
         errors.append(vtk.check_nan_values(pred["probability"]))
         errors.append(
             vtk.check_values_range(
@@ -93,12 +93,12 @@ def main(
             help="Path to the prediction file.",
         ),
     ],
-    goldstandard_folder: Annotated[
+    groundtruth_folder: Annotated[
         str,
         typer.Option(
             "-g",
-            "--goldstandard_folder",
-            help="Path to the folder containing the goldstandard file.",
+            "--groundtruth_folder",
+            help="Path to the folder containing the groundtruth file.",
         ),
     ],
     output_file: Annotated[
@@ -122,8 +122,8 @@ def main(
         with open(predictions_file, encoding="utf-8") as f:
             errors = [f.read()]
     else:
-        gold_file = extract_gs_file(goldstandard_folder)
-        errors = validate(gold_file=gold_file, pred_file=predictions_file)
+        gt_file = extract_gt_file(groundtruth_folder)
+        errors = validate(gt_file=gt_file, pred_file=predictions_file)
 
     invalid_reasons = "\n".join(errors)
     status = "INVALID" if invalid_reasons else "VALIDATED"

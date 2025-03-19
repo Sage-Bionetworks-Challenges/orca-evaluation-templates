@@ -43,7 +43,7 @@ in Python. R support TBD.
    - `probability` values are floats between 0.0 and 1.0, and cannot be
      null/None
    - There is exactly one prediction per patient (no missing or duplicate IDs)
-   - There are no predictions for patients not found in the goldstandard
+   - There are no predictions for patients not found in the groundtruth
      (unknown IDs)
 
 > [!IMPORTANT]
@@ -59,7 +59,7 @@ in Python. R support TBD.
    ```bash
    python validate.py \
      --predictions_file PATH/TO/PREDICTIONS_FILE.CSV \
-     --goldstandard_folder PATH/TO/GOLDSTANDARD_FILE.CSV [--output_file PATH/TO/OUTPUT_FILE.JSON]
+     --groundtruth_folder PATH/TO/GROUNDTRUTH_FILE.CSV [--output_file PATH/TO/OUTPUT_FILE.JSON]
    ```
 
    The expected outcomes are:
@@ -97,7 +97,7 @@ in Python. R support TBD.
    ```
    python score.py \
      --predictions_file  PATH/TO/PREDICTIONS_FILE.CSV \
-     --goldstandard_folder PATH/TO/GOLDSTANDARD_FILE.CSV [--output_file PATH/TO/OUTPUT_FILE.JSON]
+     --groundtruth_folder PATH/TO/GROUNDTRUTH_FILE.CSV [--output_file PATH/TO/OUTPUT_FILE.JSON]
    ```
 
    The expected outcomes are:
