@@ -113,7 +113,9 @@ in Python. R support TBD.
 
 This template repository includes a workflow that builds a Docker container for
 your scripts. To trigger the process, you will need to [create a new release].
-For tag versioning, we recommend following the [SemVar versioning schema].
+For tag versioning, we recommend following the [SemVar versioning schema]. You can
+follow the status of the release workflow by going to the **Actions** tab of
+your repository.
 
 This workflow will create a new image within your repository, which can be found
 under **Packages**. Here is an example of [the deployed image] for this template.
