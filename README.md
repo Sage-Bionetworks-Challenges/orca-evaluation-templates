@@ -43,8 +43,8 @@ in Python. R support TBD.
    - `probability` values are floats between 0.0 and 1.0, and cannot be
      null/None
    - There is exactly one prediction per patient (no missing or duplicate IDs)
-   - There are no predictions for patients not found in the groundtruth
-     (unknown IDs)
+   - There are only predictions for patients found in the groundtruth
+     (no unknown IDs)
 
 > [!IMPORTANT]
 > Modifying the `main()` function is highly discouraged. This function has
