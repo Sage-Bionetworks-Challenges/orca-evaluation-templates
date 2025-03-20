@@ -59,7 +59,7 @@ in Python. R support TBD.
    ```bash
    python validate.py \
      --predictions_file PATH/TO/PREDICTIONS_FILE.CSV \
-     --groundtruth_folder PATH/TO/GROUNDTRUTH_FILE.CSV [--output_file PATH/TO/OUTPUT_FILE.JSON]
+     --groundtruth_folder PATH/TO/GROUNDTRUTH_FOLDER/ [--output_file PATH/TO/OUTPUT_FILE.JSON]
    ```
 
    The expected outcomes are:
@@ -97,7 +97,7 @@ in Python. R support TBD.
    ```
    python score.py \
      --predictions_file  PATH/TO/PREDICTIONS_FILE.CSV \
-     --groundtruth_folder PATH/TO/GROUNDTRUTH_FILE.CSV [--output_file PATH/TO/OUTPUT_FILE.JSON]
+     --groundtruth_folder PATH/TO/GROUNDTRUTH_FOLDER/ [--output_file PATH/TO/OUTPUT_FILE.JSON]
    ```
 
    The expected outcomes are:
