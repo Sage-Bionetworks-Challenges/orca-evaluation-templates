@@ -1,0 +1,7 @@
+id,probability,note
+1,-0.011,invalid value (bad range)
+2,NA,invalid value (null)
+3,0.092,
+3,0.913,invalid ID (duplicate)
+5,0.543,
+10,0.290,invalid ID (unkonwn)
