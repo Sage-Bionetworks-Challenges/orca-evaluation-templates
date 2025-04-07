@@ -114,8 +114,8 @@ def main(
         res = {
             "validation_status": "",
             "validation_errors": (
-                "Validation results not found. Proceeding with scoring but "
-                "results may be inaccurate."
+                "Validation results not found. Proceeding with scoring but it "
+                "may fail or results may be inaccurate."
             ),
         }
 
