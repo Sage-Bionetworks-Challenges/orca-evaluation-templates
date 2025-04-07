@@ -129,7 +129,7 @@ def main(
             scores = score(gt_file, predictions_file)
             status = "SCORED"
             errors = ""
-        except ValueError as err:
+        except ValueError:
             errors = "Error encountered during scoring; submission not evaluated."
 
     res |= {
