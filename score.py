@@ -108,18 +108,16 @@ def main(
         with open(output_file, encoding="utf-8") as out:
             res = json.load(out)
     except (FileNotFoundError, json.decoder.JSONDecodeError):
+
+        # Notify that absent validation results may lead to inaccurate
+        # or skewed scores (e.g. due to multiple predictions per ID, etc).
         res = {
             "validation_status": "",
-            "validation_errors": "",
+            "validation_errors": (
+                "Validation results not found. Proceeding with scoring but it "
+                "may fail or results may be inaccurate."
+            ),
         }
-
-    # Notify that absent validation results may lead to inaccurate scores
-    # (e.g., due to multiple predictions per ID, missing predictions, etc).
-    if not res.get("validation_status"):
-        print(
-            "Validation results not found. Proceeding with scoring but "
-            "results may be inaccurate."
-        )
 
     # Do not attempt to score if previous validations failed. Otherwise,
     # proceed with evaluating predictions.
@@ -131,9 +129,8 @@ def main(
             scores = score(gt_file, predictions_file)
             status = "SCORED"
             errors = ""
-        except ValueError as err:
+        except ValueError:
             errors = "Error encountered during scoring; submission not evaluated."
-            print(f"Error encountered: {err}")
 
     res |= {
         "score_status": status,
