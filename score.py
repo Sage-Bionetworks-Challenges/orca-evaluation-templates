@@ -1,9 +1,19 @@
 #!/usr/bin/env python3
-"""Template scoring script.
+"""Template scorintg script.
 
-At a minimum, you will need to customize the following variables
-and the `score` function to fit your specific scoring needs. You
-can add additional functions and dependencies as needed.
+Script is currently designed for evaluating submissions for a
+single-task challenge.
+
+At a minimum, you will need to:
+    1. Define the expected data structures (see GROUNDTRUTH_COLS and
+       PREDICTION_COLS)
+    2. Customize score_task1() to fit your specific scoring needs
+    3. Add helper functions and manage dependencies as needed for your
+       scoring process
+
+For challenges with multiple tasks, create additional `score_task*()`
+functions and update the `score()` function to route evaluation to
+the appropriate task.
 """
 import json
 
