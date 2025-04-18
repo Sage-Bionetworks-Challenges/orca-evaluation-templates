@@ -1,9 +1,19 @@
 #!/usr/bin/env python3
 """Template validation script.
 
-At a minimum, you will need to customize the following variables
-and the `validate` function to fit your specific validation needs.
-You can add additional functions and dependencies as needed.
+Script is currently designed for validating submission for a single-
+task challenge.
+
+At a minimum, you will need to:
+    1. Define the expected data structures (see GROUNDTRUTH_COLS and
+       PREDICTION_COLS)
+    2. Customize validate_task1() to fit your specific validation needs
+    3. Add helper functions and manage dependencies as needed for your
+       validation process
+
+For challenges with multiple tasks, create additional `validate_task*()`
+functions and update the `validate()` function to route validation to
+the appropriate task.
 """
 import json
 
@@ -29,7 +39,7 @@ PREDICTION_COLS = {
 }
 
 
-def validate(gt_file: str, pred_file: str) -> list[str]:
+def validate_task1(gt_file: str, pred_file: str) -> list[str]:
     """Sample validation function.
 
     Checks include:
@@ -81,6 +91,26 @@ def validate(gt_file: str, pred_file: str) -> list[str]:
     return filter(None, errors)
 
 
+# --- Add more validation functions for different tasks if needed ---
+# def validate_task2(gt_file: str, pred_file: str) -> list[str]:
+#     pass
+
+
+def validate(challenge_task: str, gt_file: str, pred_file: str) -> list[str]:
+    """
+    Routes validation to the appropriate task-specific function.
+    """
+    validation_func = {
+        "task1": validate_task1,
+        # --- Add more tasks and their validation functions here ---
+        # "task_2": validate_task2,
+    }.get(challenge_task)
+
+    if validation_func:
+        return validation_func(gt_file=gt_file, pred_file=pred_file)
+    return [f"Invalid challenge task specified: `{challenge_task}`"]
+
+
 # ----- END OF CUSTOMIZATION -----
 
 
@@ -101,6 +131,14 @@ def main(
             help="Path to the folder containing the groundtruth file.",
         ),
     ],
+    task: Annotated[
+        str,
+        typer.Option(
+            "-t",
+            "--task",
+            help="Challenge task for which to validate the predictions file.",
+        ),
+    ] = "task1",
     output_file: Annotated[
         str,
         typer.Option(
@@ -123,7 +161,11 @@ def main(
             errors = [f.read()]
     else:
         gt_file = extract_gt_file(groundtruth_folder)
-        errors = validate(gt_file=gt_file, pred_file=predictions_file)
+        errors = validate(
+            challenge_task=task,
+            gt_file=gt_file,
+            pred_file=predictions_file,
+        )
 
     invalid_reasons = "\n".join(errors)
     status = "INVALID" if invalid_reasons else "VALIDATED"

@@ -50,10 +50,18 @@ in Python. R support TBD.
 > Modifying the `main()` function is highly discouraged. This function has
 > specifically been written to interact with ORCA.
 
-3. Update `requirements.txt` with any additional libraries/packages used by the
+3. The template is currently designed with the assumption that the challenge
+   has a <u>single</u> task.
+   
+   If your challenge has <u>multiple</u> tasks, create additional validation
+   functions (e.g., `validate_task2()`, `validate_task3()`, ...) and update the
+   `validate()` function to direct the validation process to the correct function
+   for each task.
+
+4. Update `requirements.txt` with any additional libraries/packages used by the
    script.
 
-4. (optional) Locally run `validate.py` to verify its functionality, by replacing
+5. (optional) Locally run `validate.py` to verify its functionality, by replacing
    the placeholder paths with the filepaths to your data:
 
    ```bash
@@ -89,9 +97,17 @@ in Python. R support TBD.
 > Modifying the `main()` function is highly discouraged. This function has
 > specifically been written to interact with ORCA.
 
-3. Update `requirements.txt` with any additional libraries/packages used by the script.
+3. The template is currently designed with the assumption that the challenge
+   has a <u>single</u> task.
+   
+   If your challenge has <u>multiple</u> tasks, create additional scoring
+   functions (e.g., `score_task2()`, `score_task3()`, ...) and update the
+   `score()` function to direct the validation process to the correct function
+   for each task.
 
-4. (optional) Locally run `score.py` to ensure it executes correctly and returns
+4. Update `requirements.txt` with any additional libraries/packages used by the script.
+
+5. (optional) Locally run `score.py` to ensure it executes correctly and returns
    the expected scores:
 
    ```
