@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Template scorintg script.
+"""Template scoring script.
 
 Script is currently designed for evaluating submissions for a
 single-task challenge.
