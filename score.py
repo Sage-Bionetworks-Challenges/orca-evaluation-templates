@@ -82,6 +82,14 @@ def main(
             help="Path to the folder containing the groundtruth file.",
         ),
     ],
+    task: Annotated[
+        str,
+        typer.Option(
+            "-t",
+            "--task",
+            help="Challenge task for which to evaluate the predictions file.",
+        ),
+    ] = "task1",
     output_file: Annotated[
         str,
         typer.Option(
