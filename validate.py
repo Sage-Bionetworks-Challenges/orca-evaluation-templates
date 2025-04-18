@@ -29,7 +29,7 @@ PREDICTION_COLS = {
 }
 
 
-def validate(gt_file: str, pred_file: str) -> list[str]:
+def validate_task1(gt_file: str, pred_file: str) -> list[str]:
     """Sample validation function.
 
     Checks include:
@@ -79,6 +79,26 @@ def validate(gt_file: str, pred_file: str) -> list[str]:
 
     # Remove any empty strings from the list before return.
     return filter(None, errors)
+
+
+# --- Add more validation functions for different tasks if needed ---
+# def validate_task2(gt_file: str, pred_file: str) -> list[str]:
+#     pass
+
+
+def validate(challenge_task: str, gt_file: str, pred_file: str) -> list[str]:
+    """
+    Routes validation to the appropriate task-specific function.
+    """
+    validation_func = {
+        "task1": validate_task1,
+        # --- Add more tasks and their validation functions here ---
+        # "task_2": validate_task2,
+    }.get(challenge_task)
+
+    if validation_func:
+        return validation_func(gt_file=gt_file, pred_file=pred_file)
+    return [f"Invalid challenge task specified: `{challenge_task}`"]
 
 
 # ----- END OF CUSTOMIZATION -----
@@ -131,7 +151,11 @@ def main(
             errors = [f.read()]
     else:
         gt_file = extract_gt_file(groundtruth_folder)
-        errors = validate(gt_file=gt_file, pred_file=predictions_file)
+        errors = validate(
+            challenge_task=task,
+            gt_file=gt_file,
+            pred_file=predictions_file,
+        )
 
     invalid_reasons = "\n".join(errors)
     status = "INVALID" if invalid_reasons else "VALIDATED"

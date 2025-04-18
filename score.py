@@ -29,7 +29,7 @@ PREDICTION_COLS = {
 }
 
 
-def score(gt_file: str, pred_file: str) -> dict[str, int | float]:
+def score_task1(gt_file: str, pred_file: str) -> dict[str, int | float]:
     """Sample scoring function.
 
     Metrics returned:
@@ -60,6 +60,26 @@ def score(gt_file: str, pred_file: str) -> dict[str, int | float]:
         merged["disease"], merged["probability"]
     )
     return {"auc_roc": roc, "auprc": auc(recall, precision)}
+
+
+# --- Add more scoring functions for different tasks if needed ---
+# def score_task2(gt_file: str, pred_file: str) -> dict[str, int | float]:
+#     pass
+
+
+def score(challenge_task: str, gt_file: str, pred_file: str) -> dict[str, int | float]:
+    """
+    Routes evaluation to the appropriate task-specific function.
+    """
+    scoring_func = {
+        "task1": score_task1,
+        # --- Add more tasks and their validation functions here ---
+        # "task_2": score_task2,
+    }.get(challenge_task)
+
+    if scoring_func:
+        return scoring_func(gt_file=gt_file, pred_file=pred_file)
+    raise LookupError
 
 
 # ----- END OF CUSTOMIZATION -----
@@ -134,11 +154,17 @@ def main(
     else:
         gt_file = extract_gt_file(groundtruth_folder)
         try:
-            scores = score(gt_file, predictions_file)
+            scores = score(
+                challenge_task=task,
+                gt_file=gt_file,
+                pred_file=predictions_file,
+            )
             status = "SCORED"
             errors = ""
         except ValueError:
             errors = "Error encountered during scoring; submission not evaluated."
+        except LookupError:
+            errors = f"Invalid challenge task specified: `{task}`"
 
     res |= {
         "score_status": status,
