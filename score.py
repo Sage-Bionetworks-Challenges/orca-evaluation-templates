@@ -89,7 +89,7 @@ def score(challenge_task: str, gt_file: str, pred_file: str) -> dict[str, int | 
 
     if scoring_func:
         return scoring_func(gt_file=gt_file, pred_file=pred_file)
-    raise LookupError
+    raise KeyError
 
 
 # ----- END OF CUSTOMIZATION -----
@@ -173,7 +173,7 @@ def main(
             errors = ""
         except ValueError:
             errors = "Error encountered during scoring; submission not evaluated."
-        except LookupError:
+        except KeyError:
             errors = f"Invalid challenge task specified: `{task}`"
 
     res |= {
