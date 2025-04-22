@@ -113,13 +113,13 @@ def main(
         ),
     ],
     task: Annotated[
-        str,
+        int,
         typer.Option(
             "-t",
             "--task",
-            help="Challenge task for which to evaluate the predictions file.",
+            help="Challenge task number for which to validate the predictions file.",
         ),
-    ] = "task1",
+    ] = 1,
     output_file: Annotated[
         str,
         typer.Option(
