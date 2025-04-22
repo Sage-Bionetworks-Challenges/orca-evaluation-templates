@@ -91,24 +91,28 @@ def validate_task1(gt_file: str, pred_file: str) -> list[str]:
     return filter(None, errors)
 
 
-# --- Add more validation functions for different tasks if needed ---
+# --- Add more validation functions for different tasks as needed ---
 # def validate_task2(gt_file: str, pred_file: str) -> list[str]:
-#     pass
+#     """Validation function for Task 2.
+
+#     !!! Reminder: return type must be a list.
+#     """
+#     return []
 
 
-def validate(challenge_task: str, gt_file: str, pred_file: str) -> list[str]:
+def validate(task_number: int, gt_file: str, pred_file: str) -> list[str]:
     """
     Routes validation to the appropriate task-specific function.
     """
     validation_func = {
-        "task1": validate_task1,
+        1: validate_task1,
         # --- Add more tasks and their validation functions here ---
-        # "task_2": validate_task2,
-    }.get(challenge_task)
+        # 2: validate_task2,
+    }.get(task_number)
 
     if validation_func:
         return validation_func(gt_file=gt_file, pred_file=pred_file)
-    return [f"Invalid challenge task specified: `{challenge_task}`"]
+    return [f"Invalid challenge task number specified: `{task_number}`"]
 
 
 # ----- END OF CUSTOMIZATION -----
@@ -131,14 +135,14 @@ def main(
             help="Path to the folder containing the groundtruth file.",
         ),
     ],
-    task: Annotated[
-        str,
+    task_number: Annotated[
+        int,
         typer.Option(
             "-t",
-            "--task",
-            help="Challenge task for which to validate the predictions file.",
+            "--task_number",
+            help="Challenge task number for which to validate the predictions file.",
         ),
-    ] = "task1",
+    ] = 1,
     output_file: Annotated[
         str,
         typer.Option(
@@ -162,7 +166,7 @@ def main(
     else:
         gt_file = extract_gt_file(groundtruth_folder)
         errors = validate(
-            challenge_task=task,
+            task_number=task_number,
             gt_file=gt_file,
             pred_file=predictions_file,
         )
