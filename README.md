@@ -2,7 +2,9 @@
   Evaluation Script Templates
 </h1>
 <h3 align="center">
+
   Templates for creating evaluation scripts to be plugged into the [Synapse ORCA workflow]
+
 </h3>
 <p align="center">
   <img 
