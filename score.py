@@ -72,9 +72,13 @@ def score_task1(gt_file: str, pred_file: str) -> dict[str, int | float]:
     return {"auc_roc": roc, "auprc": auc(recall, precision)}
 
 
-# --- Add more scoring functions for different tasks if needed ---
+# --- Add more scoring functions for different tasks as needed ---
 # def score_task2(gt_file: str, pred_file: str) -> dict[str, int | float]:
-#     pass
+#     """Scoring function for Task 2.
+#
+#     !!! Reminder: return type must be a dictionary.
+#     """
+#     return {}
 
 
 def score(task_number: int, gt_file: str, pred_file: str) -> dict[str, int | float]:

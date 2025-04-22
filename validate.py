@@ -91,9 +91,13 @@ def validate_task1(gt_file: str, pred_file: str) -> list[str]:
     return filter(None, errors)
 
 
-# --- Add more validation functions for different tasks if needed ---
+# --- Add more validation functions for different tasks as needed ---
 # def validate_task2(gt_file: str, pred_file: str) -> list[str]:
-#     pass
+#     """Validation function for Task 2.
+
+#     !!! Reminder: return type must be a list.
+#     """
+#     return []
 
 
 def validate(task_number: int, gt_file: str, pred_file: str) -> list[str]:
