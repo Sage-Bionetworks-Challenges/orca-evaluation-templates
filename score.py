@@ -77,15 +77,15 @@ def score_task1(gt_file: str, pred_file: str) -> dict[str, int | float]:
 #     pass
 
 
-def score(challenge_task: str, gt_file: str, pred_file: str) -> dict[str, int | float]:
+def score(task_number: int, gt_file: str, pred_file: str) -> dict[str, int | float]:
     """
     Routes evaluation to the appropriate task-specific function.
     """
     scoring_func = {
-        "task1": score_task1,
+        1: score_task1,
         # --- Add more tasks and their validation functions here ---
-        # "task_2": score_task2,
-    }.get(challenge_task)
+        # 2: score_task2,
+    }.get(task_number)
 
     if scoring_func:
         return scoring_func(gt_file=gt_file, pred_file=pred_file)
@@ -112,11 +112,11 @@ def main(
             help="Path to the folder containing the groundtruth file.",
         ),
     ],
-    task: Annotated[
+    task_number: Annotated[
         int,
         typer.Option(
             "-t",
-            "--task",
+            "--task_number",
             help="Challenge task number for which to validate the predictions file.",
         ),
     ] = 1,
@@ -165,7 +165,7 @@ def main(
         gt_file = extract_gt_file(groundtruth_folder)
         try:
             scores = score(
-                challenge_task=task,
+                task_number=task_number,
                 gt_file=gt_file,
                 pred_file=predictions_file,
             )
@@ -174,7 +174,7 @@ def main(
         except ValueError:
             errors = "Error encountered during scoring; submission not evaluated."
         except KeyError:
-            errors = f"Invalid challenge task specified: `{task}`"
+            errors = f"Invalid challenge task number specified: `{task_number}`"
 
     res |= {
         "score_status": status,

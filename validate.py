@@ -96,19 +96,19 @@ def validate_task1(gt_file: str, pred_file: str) -> list[str]:
 #     pass
 
 
-def validate(challenge_task: str, gt_file: str, pred_file: str) -> list[str]:
+def validate(task_number: int, gt_file: str, pred_file: str) -> list[str]:
     """
     Routes validation to the appropriate task-specific function.
     """
     validation_func = {
-        "task1": validate_task1,
+        1: validate_task1,
         # --- Add more tasks and their validation functions here ---
-        # "task_2": validate_task2,
-    }.get(challenge_task)
+        # 2: validate_task2,
+    }.get(task_number)
 
     if validation_func:
         return validation_func(gt_file=gt_file, pred_file=pred_file)
-    return [f"Invalid challenge task specified: `{challenge_task}`"]
+    return [f"Invalid challenge task number specified: `{task_number}`"]
 
 
 # ----- END OF CUSTOMIZATION -----
@@ -131,11 +131,11 @@ def main(
             help="Path to the folder containing the groundtruth file.",
         ),
     ],
-    task: Annotated[
+    task_number: Annotated[
         int,
         typer.Option(
             "-t",
-            "--task",
+            "--task_number",
             help="Challenge task number for which to validate the predictions file.",
         ),
     ] = 1,
@@ -162,7 +162,7 @@ def main(
     else:
         gt_file = extract_gt_file(groundtruth_folder)
         errors = validate(
-            challenge_task=task,
+            task_number=task_number,
             gt_file=gt_file,
             pred_file=predictions_file,
         )
