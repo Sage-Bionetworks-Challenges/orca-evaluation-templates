@@ -2,10 +2,18 @@
   Evaluation Script Templates
 </h1>
 <h3 align="center">
-  
   Templates for creating evaluation scripts to be plugged into the [Synapse ORCA workflow]
-    
 </h3>
+<p align="center">
+  <img 
+    alt="GitHub release (latest by date)" 
+    src="https://img.shields.io/github/release/Sage-Bionetworks-Challenges/orca-evaluation-templates?label=latest%20release&display_name=release&style=flat-square"
+  >
+  <img 
+    alt="GitHub Release Date" 
+    src="https://img.shields.io/github/release-date/Sage-Bionetworks-Challenges/orca-evaluation-templates?style=flat-square&color=darkgreen"
+  >
+</p>
 
 You can either build off of this repository template or use it as reference to
 build your scripts from scratch. Provided here is a sample evaluation template
@@ -46,29 +54,33 @@ in Python. R support TBD.
    - There are only predictions for patients found in the groundtruth
      (no unknown IDs)
 
+> [!NOTE]
+> The template is currently designed with the assumption that the challenge
+> has a _single_ task.
+> 
+> If your challenge has _multiple_ tasks, create additional validation
+> functions (e.g., `validate_task2()`, `validate_task3()`, ...) and update the
+> `validate()` function to direct the validation process to the correct function
+> for each task.
+
 > [!IMPORTANT]
 > Modifying the `main()` function is highly discouraged. This function has
 > specifically been written to interact with ORCA.
 
-3. The template is currently designed with the assumption that the challenge
-   has a <u>single</u> task.
-   
-   If your challenge has <u>multiple</u> tasks, create additional validation
-   functions (e.g., `validate_task2()`, `validate_task3()`, ...) and update the
-   `validate()` function to direct the validation process to the correct function
-   for each task.
-
-4. Update `requirements.txt` with any additional libraries/packages used by the
+3. Update `requirements.txt` with any additional libraries/packages used by the
    script.
 
-5. (optional) Locally run `validate.py` to verify its functionality, by replacing
+4. (optional) Locally run `validate.py` to verify its functionality, by replacing
    the placeholder paths with the filepaths to your data:
 
    ```bash
    python validate.py \
      --predictions_file PATH/TO/PREDICTIONS_FILE.CSV \
-     --groundtruth_folder PATH/TO/GROUNDTRUTH_FOLDER/ [--output_file PATH/TO/OUTPUT_FILE.JSON]
+     --groundtruth_folder PATH/TO/GROUNDTRUTH_FOLDER/ [--output_file PATH/TO/OUTPUT_FILE.JSON] [--task_number TASK_NUMBER]
    ```
+
+   Specify `--output_file` and `--task_number` as needed. Use `--help` for more
+   details.
 
    The expected outcomes are:
 
@@ -93,28 +105,32 @@ in Python. R support TBD.
    - Area under the receiver operating characteristic curve (AUROC)
    - Area under the precision-recall curve (AUPRC)
 
+> [!NOTE]
+> The template is currently designed with the assumption that the challenge
+> has a _single_ task.
+> 
+> If your challenge has _multiple_ tasks, create additional scoring
+> functions (e.g., `score_task2()`, `score_task3()`, ...) and update the
+> `score()` function to direct the validation process to the correct function
+> for each task.
+
 > [!IMPORTANT]
 > Modifying the `main()` function is highly discouraged. This function has
 > specifically been written to interact with ORCA.
 
-3. The template is currently designed with the assumption that the challenge
-   has a <u>single</u> task.
-   
-   If your challenge has <u>multiple</u> tasks, create additional scoring
-   functions (e.g., `score_task2()`, `score_task3()`, ...) and update the
-   `score()` function to direct the validation process to the correct function
-   for each task.
+3. Update `requirements.txt` with any additional libraries/packages used by the script.
 
-4. Update `requirements.txt` with any additional libraries/packages used by the script.
-
-5. (optional) Locally run `score.py` to ensure it executes correctly and returns
+4. (optional) Locally run `score.py` to ensure it executes correctly and returns
    the expected scores:
 
    ```
    python score.py \
      --predictions_file  PATH/TO/PREDICTIONS_FILE.CSV \
-     --groundtruth_folder PATH/TO/GROUNDTRUTH_FOLDER/ [--output_file PATH/TO/OUTPUT_FILE.JSON]
+     --groundtruth_folder PATH/TO/GROUNDTRUTH_FOLDER/ [--output_file PATH/TO/OUTPUT_FILE.JSON] [--task_number TASK_NUMBER]
    ```
+
+   Specify `--output_file` and `--task_number` as needed. Use `--help` for more
+   details.
 
    The expected outcomes are:
 
