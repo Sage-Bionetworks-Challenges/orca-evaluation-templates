@@ -78,7 +78,7 @@ in Python. R support TBD.
    ```bash
    python validate.py \
      --predictions_file PATH/TO/PREDICTIONS_FILE.CSV \
-     --groundtruth_folder PATH/TO/GROUNDTRUTH_FOLDER/ [--output_file PATH/TO/OUTPUT_FILE.JSON] [--task_number TASK_NUMBER]
+     --groundtruth_file PATH/TO/GROUNDTRUTH_FILE/ [--output_file PATH/TO/OUTPUT_FILE.JSON] [--task_number TASK_NUMBER]
    ```
 
    Specify `--output_file` and `--task_number` as needed. Use `--help` for more
@@ -128,7 +128,7 @@ in Python. R support TBD.
    ```
    python score.py \
      --predictions_file  PATH/TO/PREDICTIONS_FILE.CSV \
-     --groundtruth_folder PATH/TO/GROUNDTRUTH_FOLDER/ [--output_file PATH/TO/OUTPUT_FILE.JSON] [--task_number TASK_NUMBER]
+     --groundtruth_file PATH/TO/GROUNDTRUTH_FILE/ [--output_file PATH/TO/OUTPUT_FILE.JSON] [--task_number TASK_NUMBER]
    ```
 
    Specify `--output_file` and `--task_number` as needed. Use `--help` for more

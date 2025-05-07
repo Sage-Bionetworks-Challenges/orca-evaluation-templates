@@ -108,12 +108,12 @@ def main(
             help="Path to the prediction file.",
         ),
     ],
-    groundtruth_folder: Annotated[
+    groundtruth_file: Annotated[
         str,
         typer.Option(
             "-g",
-            "--groundtruth_folder",
-            help="Path to the folder containing the groundtruth file.",
+            "--groundtruth_file",
+            help="Path to the groundtruth file.",
         ),
     ],
     task_number: Annotated[
@@ -166,11 +166,10 @@ def main(
     if res.get("validation_status") == "INVALID":
         errors = "Submission could not be evaluated due to validation errors."
     else:
-        gt_file = extract_gt_file(groundtruth_folder)
         try:
             scores = score(
                 task_number=task_number,
-                gt_file=gt_file,
+                gt_file=groundtruth_file,
                 pred_file=predictions_file,
             )
             status = "SCORED"
