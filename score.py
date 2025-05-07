@@ -22,6 +22,9 @@ import typer
 from sklearn.metrics import auc, precision_recall_curve, roc_auc_score
 from typing_extensions import Annotated
 
+# Uncomment the following if any files are tarfile/zipfiles and require extraction.
+# from utils import inspect_zip
+
 # ---- CUSTOMIZATION REQUIRED ----
 
 # Groundtruth columns and data type.

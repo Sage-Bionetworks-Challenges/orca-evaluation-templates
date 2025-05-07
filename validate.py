@@ -22,6 +22,9 @@ import typer
 from cnb_tools import validation_toolkit as vtk
 from typing_extensions import Annotated
 
+# Uncomment the following if any files are tarfile/zipfiles and require extraction.
+# from utils import inspect_zip
+
 # ---- CUSTOMIZATION REQUIRED ----
 
 # Groundtruth columns and data type.
