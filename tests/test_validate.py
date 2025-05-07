@@ -6,11 +6,8 @@ interacting with ORCA, NOT the actual validation process written.
 
 import json
 import os
-import tempfile
 from unittest.mock import patch
 
-import pandas as pd
-import pytest
 import typer
 from typer.testing import CliRunner
 
@@ -22,36 +19,15 @@ app.command()(main)
 runner = CliRunner()
 
 
-@pytest.fixture
-def temp_dir():
-    with tempfile.TemporaryDirectory() as tmpdir:
-        yield tmpdir
-
-
-@pytest.fixture
-def groundtruth_dir(temp_dir):
-    gt_dir = os.path.join(temp_dir, "groundtruth")
-    os.makedirs(gt_dir)
-    return gt_dir
-
-
-@pytest.fixture
-def gt_file(groundtruth_dir):
-    truth = pd.DataFrame(
-        {
-            "id": ["A_01", "A_02", "A_03"],
-            "disease": [1, 0, 1],
-        }
+def test_validate_valid_task_number(gt_file, pred_file):
+    """Check that the return type for validate() is a list, filter, or tuple."""
+    task_number = 1
+    errors = validate(
+        task_number=task_number,
+        gt_file=gt_file,
+        pred_file=pred_file,
     )
-    gt_file = os.path.join(groundtruth_dir, "truth.csv")
-    truth.to_csv(gt_file, index=False)
-    return gt_file
-
-
-def create_prediction_file(temp_dir, data):
-    pred_file = os.path.join(temp_dir, "predictions.csv")
-    pd.DataFrame(data).to_csv(pred_file, index=False)
-    return pred_file
+    assert isinstance(errors, (list, filter, tuple))
 
 
 def test_validate_invalid_task_number():
@@ -63,22 +39,6 @@ def test_validate_invalid_task_number():
         pred_file="dummy_pred.csv",
     )
     assert f"Invalid challenge task number specified: `{task_number}`" in errors
-
-
-def test_validate_valid_task_number(gt_file, temp_dir):
-    """Check that the return type for validate() is a list, filter, or tuple."""
-    task_number = 1
-    pred = {
-        "id": ["A_01", "A_02", "A_03"],
-        "probability": [0.5, 0.5, 0.5],
-    }
-    pred_file = create_prediction_file(temp_dir, pred)
-    errors = validate(
-        task_number=task_number,
-        gt_file=gt_file,
-        pred_file=pred_file,
-    )
-    assert isinstance(errors, (list, filter, tuple))
 
 
 @patch("validate.extract_gt_file")
@@ -115,15 +75,10 @@ def test_main_invalid_submission_type(
 @patch("validate.extract_gt_file")
 @patch("validate.validate")
 def test_main_valid_submission_type(
-    mock_validate, mock_extract_gt_file, gt_file, temp_dir
+    mock_validate, mock_extract_gt_file, gt_file, pred_file, temp_dir
 ):
     mock_extract_gt_file.return_value = gt_file
     mock_validate.return_value = []
-    pred = {
-        "id": ["A_01", "A_02", "A_03"],
-        "probability": [0.5, 0.5, 0.5],
-    }
-    pred_file = create_prediction_file(temp_dir, pred)
     groundtruth_dir = os.path.dirname(gt_file)
     output_file = os.path.join(temp_dir, "results.json")
     result = runner.invoke(
@@ -168,18 +123,14 @@ def test_main_valid_submission_type(
 @patch("validate.extract_gt_file")
 @patch("validate.validate")
 def test_main_long_error_message(
-    mock_validate, mock_extract_gt_file, gt_file, temp_dir
+    mock_validate, mock_extract_gt_file, gt_file, pred_file, temp_dir
 ):
     mock_extract_gt_file.return_value = gt_file
 
     # Create a dummy string longer than 500 characters.
     long_error_message = "foo" * 500
     mock_validate.return_value = [long_error_message]
-    pred = {
-        "id": ["A_01"],
-        "probability": [0.5],
-    }
-    pred_file = create_prediction_file(temp_dir, pred)
+    
     groundtruth_dir = os.path.dirname(gt_file)
     output_file = os.path.join(temp_dir, "results.json")
 
