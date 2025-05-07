@@ -22,8 +22,6 @@ import typer
 from cnb_tools import validation_toolkit as vtk
 from typing_extensions import Annotated
 
-from utils import extract_gt_file
-
 # ---- CUSTOMIZATION REQUIRED ----
 
 # Groundtruth columns and data type.
