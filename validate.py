@@ -22,7 +22,8 @@ import typer
 from cnb_tools import validation_toolkit as vtk
 from typing_extensions import Annotated
 
-from utils import extract_gt_file
+# Uncomment the following if any files are tarfile/zipfiles and require extraction.
+from utils import extract_gt_file #,inspect zip
 
 # ---- CUSTOMIZATION REQUIRED ----
 
@@ -131,7 +132,7 @@ def main(
         str,
         typer.Option(
             "-g",
-            "--groundtruth_folder",
+            "--groundtruth_file",
             help="Path to the folder containing the groundtruth file.",
         ),
     ],

@@ -22,7 +22,8 @@ import typer
 from sklearn.metrics import auc, precision_recall_curve, roc_auc_score
 from typing_extensions import Annotated
 
-from utils import extract_gt_file
+# Uncomment the following if any files are tarfile/zipfiles and require extraction.
+from utils import extract_gt_file #,inspect zip
 
 # ---- CUSTOMIZATION REQUIRED ----
 
