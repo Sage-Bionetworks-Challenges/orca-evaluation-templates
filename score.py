@@ -23,7 +23,7 @@ from sklearn.metrics import auc, precision_recall_curve, roc_auc_score
 from typing_extensions import Annotated
 
 # Uncomment the following if any files are tarfile/zipfiles and require extraction.
-# from utils import inspect_zip
+from utils import extract_gt_file #,inspect zip
 
 # ---- CUSTOMIZATION REQUIRED ----
 
@@ -109,12 +109,12 @@ def main(
             help="Path to the prediction file.",
         ),
     ],
-    groundtruth_file: Annotated[
+    groundtruth_folder: Annotated[
         str,
         typer.Option(
             "-g",
-            "--groundtruth_file",
-            help="Path to the groundtruth file.",
+            "--groundtruth_folder",
+            help="Path to the folder containing the groundtruth file.",
         ),
     ],
     task_number: Annotated[
@@ -167,10 +167,11 @@ def main(
     if res.get("validation_status") == "INVALID":
         errors = "Submission could not be evaluated due to validation errors."
     else:
+        gt_file = extract_gt_file(groundtruth_folder)
         try:
             scores = score(
                 task_number=task_number,
-                gt_file=groundtruth_file,
+                gt_file=gt_file,
                 pred_file=predictions_file,
             )
             status = "SCORED"
