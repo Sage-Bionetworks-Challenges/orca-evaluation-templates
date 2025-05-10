@@ -118,7 +118,7 @@ in Python. R support TBD.
 > for each task.
 
 > [!IMPORTANT]
-> Like `validate.py`, modifying `main()` is highly discouraged.
+> Like `validate.py`, modifying `main()` is strongly discouraged.
 
 3. Update `requirements.txt` with any additional libraries/packages used by the script.
 
