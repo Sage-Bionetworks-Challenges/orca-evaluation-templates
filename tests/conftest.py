@@ -15,12 +15,14 @@ def pytest_configure(config):
 
 @pytest.fixture(scope="module")
 def temp_dir():
+    """Creates a temporary directory for test files."""
     with tempfile.TemporaryDirectory() as tmpdir:
         yield tmpdir
 
 
 @pytest.fixture(scope="module")
 def groundtruth_dir(temp_dir):
+    """Creates a temporary groundtruth directory."""
     gt_dir = os.path.join(temp_dir, "groundtruth")
     os.makedirs(gt_dir)
     return gt_dir
@@ -28,6 +30,7 @@ def groundtruth_dir(temp_dir):
 
 @pytest.fixture(scope="module")
 def gt_file(groundtruth_dir):
+    """Creates a dummy groundtruth file."""
     truth = pd.DataFrame(
         {
             "id": ["A_01", "A_02", "A_03"],
@@ -41,6 +44,7 @@ def gt_file(groundtruth_dir):
 
 @pytest.fixture(scope="module")
 def pred_file(temp_dir):
+    """Creates a dummy prediction file."""
     pred = pd.DataFrame(
         {
             "id": ["A_01", "A_02", "A_03"],
@@ -54,17 +58,21 @@ def pred_file(temp_dir):
 
 @pytest.fixture(scope="module")
 def valid_predictions_json():
-    return json.dumps({
-        "validation_status": "VALIDATED",
-        "validation_errors": "",
-    })
+    """Creates a dummy valid results JSON."""
+    return json.dumps(
+        {
+            "validation_status": "VALIDATED",
+            "validation_errors": "",
+        }
+    )
 
 
 @pytest.fixture(scope="module")
 def invalid_predictions_json():
-    return json.dumps({
-        "validation_status": "INVALID",
-        "validation_errors": "Something went wrong.",
-    })
-
-
+    """Creates a dummy invalid results JSON."""
+    return json.dumps(
+        {
+            "validation_status": "INVALID",
+            "validation_errors": "Something went wrong.",
+        }
+    )
