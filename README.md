@@ -66,8 +66,9 @@ in Python. R support TBD.
 > for each task.
 
 > [!IMPORTANT]
-> Modifying the `main()` function is highly discouraged. This function has
-> specifically been written to interact with ORCA.
+> The `main()` function is specifically designed for seamless interaction with
+> ORCA. **Modifying this function is strongly discouraged** and could lead to
+> compatibility issues. Unit tests are in place to ensure its proper integration.
 
 3. Update `requirements.txt` with any additional libraries/packages used by the
    script.
@@ -117,8 +118,7 @@ in Python. R support TBD.
 > for each task.
 
 > [!IMPORTANT]
-> Modifying the `main()` function is highly discouraged. This function has
-> specifically been written to interact with ORCA.
+> Like `validate.py`, modifying `main()` is strongly discouraged.
 
 3. Update `requirements.txt` with any additional libraries/packages used by the script.
 

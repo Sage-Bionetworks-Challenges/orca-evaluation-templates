@@ -40,7 +40,7 @@ PREDICTION_COLS = {
 }
 
 
-def validate_task1(gt_file: str, pred_file: str) -> list[str]:
+def validate_task1(gt_file: str, pred_file: str) -> list[str] | filter:
     """Sample validation function.
 
     Checks include:
@@ -101,7 +101,7 @@ def validate_task1(gt_file: str, pred_file: str) -> list[str]:
 #     return []
 
 
-def validate(task_number: int, gt_file: str, pred_file: str) -> list[str]:
+def validate(task_number: int, gt_file: str, pred_file: str) -> list[str] | filter:
     """
     Routes validation to the appropriate task-specific function.
     """
