@@ -18,10 +18,10 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4.1.4
+        uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
 
       - name: Log into the container registry
-        uses: docker/login-action@v3.1.0
+        uses: docker/login-action@e92390c5fb421da1463c202d546fed0ec5c39f20 # v3.1.0
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
@@ -29,20 +29,20 @@ jobs:
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
-        uses: docker/metadata-action@v5.5.1
+        uses: docker/metadata-action@8e5442c4ef9f78752691e2d8f8d19755c6f78e81 # v5.5.1
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
       - name: Build and push Docker image
         id: push
-        uses: docker/build-push-action@v5.3.0
+        uses: docker/build-push-action@2cdde995de11925a030ce8070c3d77a52ffcf1c0 # v5.3.0
         with:
           context: .
           push: true
           tags: ${{ steps.meta.outputs.tags }}
 
       - name: Generate artifact attestation for provenance
-        uses: actions/attest-build-provenance@v2
+        uses: actions/attest-build-provenance@e8998f949152b193b063cb0ec769d69d929409be # v2
         with:
           subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}
           subject-digest: ${{ steps.push.outputs.digest }}
