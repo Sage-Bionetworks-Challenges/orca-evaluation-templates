@@ -12,26 +12,24 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.10", "3.11", "3.12"]
+        # TODO: 3.10 EOL coming soon, remove it from matrix once support is dropped
+        python-version: ["3.10", "3.11", "3.12", "3.13"]
     permissions:
       contents: read
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
+      - name: Install uv
+        uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990 # v8.3.2
         with:
           python-version: ${{ matrix.python-version }}
-  
+
       - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
+        run: uv pip install --system -r requirements.txt pytest pytest-cov
 
       - name: Test with pytest
         run: |
-          pip install pytest pytest-cov
           pytest --cov=. --cov-report=xml tests/test_validate.py
           pytest --cov=. --cov-report=xml tests/test_score.py
