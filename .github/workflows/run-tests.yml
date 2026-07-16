@@ -27,9 +27,11 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: Install dependencies
-        run: uv pip install --system -r requirements.txt pytest pytest-cov
+        run: |
+          uv venv
+          uv pip install -r requirements.txt pytest pytest-cov
 
       - name: Test with pytest
         run: |
-          pytest --cov=. --cov-report=xml tests/test_validate.py
-          pytest --cov=. --cov-report=xml tests/test_score.py
+          uv run pytest --cov=. --cov-report=xml tests/test_validate.py
+          uv run pytest --cov=. --cov-report=xml tests/test_score.py
