@@ -2,3 +2,4 @@ cnb_tools==0.5.1
 pandas==2.3.3
 scikit-learn==1.9.0
 typer==0.26.8
+anyio==4.14.2
